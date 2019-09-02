@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid ttt">
     <div class="row">
-      <div :class="[getGameStatus.active ? 'col-6' : 'col-4']"><button v-on:click="counter += 1, status()">Up</button>{{counter}}</div>
+      <div :class="[getGameStatus.active ? 'col-6' : 'col-4']"><button v-on:click="counter += 1, status()">get status</button></div>
       <div :class="getGameStatus.active ? '' : 'col-4'" v-if="getGameStatus.active === false">{{getGameStatus.winningPlayer}} wins!</div>
-      <div :class="getGameStatus.active ? 'col-6' : 'col-4'"><button v-on:click="counter -= 1">Down</button>{{counter}}</div>
+      <div :class="getGameStatus.active ? 'col-6' : 'col-4'"><button v-on:click="resetBoard()">New Game</button></div>
     </div>
     <div class="container tboard">
       <div v-for="(board, i) in getBoard" :class="['row', 'sect-' + i]">
@@ -36,13 +36,18 @@
     },
     methods: {
       updateBoard(mIndex, aIndex) {
-        let board = this.getBoard
-        if (board[mIndex][aIndex] === " ") {
-          board[mIndex].splice(aIndex, 1, this.playerOne === true ? "X" : "O")
-          this.playerOne = !this.playerOne
+        if (this.getGameStatus.active) {
+          let board = this.getBoard
+          if (board[mIndex][aIndex] === " ") {
+            board[mIndex].splice(aIndex, 1, this.playerOne === true ? "X" : "O")
+            this.playerOne = !this.playerOne
+          }
+          this.$store.dispatch("updateBoard", board)
         }
-        console.log(board)
-        this.$store.dispatch("updateBoard", board)
+      },
+      resetBoard() {
+        this.playerOne = true
+        this.$store.dispatch("reset", {board: [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]], active: true})
       },
       status() {
         console.log(this.getGameStatus)

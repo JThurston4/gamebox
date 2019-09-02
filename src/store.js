@@ -11,8 +11,9 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    setPlayerMove(state, board) {
-      state.tttBoard = board;
+    setNewGame(state, payload) {
+      state.tttBoard = payload.board;
+      state.winner.active = payload.active
     },
     setBoard(state, board) {
       state.tttBoard = board
@@ -47,8 +48,10 @@ export default new Vuex.Store({
       winCons(board);
       winCons(diags);
       winCons(cols);
-      console.log(board)
       commit('setBoard', board)
     },
+    reset({ commit }, payload) {
+      commit('setNewGame', payload)
+    }
   }
 })
