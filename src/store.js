@@ -6,24 +6,49 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     tttBoard: [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]],
-    playerOneTurn: "X"
+    playerOneTurn: "X",
+    winner: {active: true, winningPlayer: ''}
 
   },
   mutations: {
     setPlayerMove(state, board) {
       state.tttBoard = board;
     },
-    setBoard(state, payload) {
-      state.tttBoard = payload.board
-      state.playerOneTurn = payload.player
+    setBoard(state, board) {
+      state.tttBoard = board
+    },
+    setWinner(state, winner) {
+      state.winner = winner
     }
   },
   actions: {
-    playerMove({ commit, dispatch }, board) {
-      commit('setPlayerMove', board)
+    updateBoard({ commit, dispatch }, board) {
+      let cols = [[], [], []];
+      let diags = [[], []]
+
+      for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+          cols[j].push(board[i][j])
+          if (i === j) {
+            diags[0].push(board[i][j])
+          }
+          if (i + j === 2) {
+            diags[1].push(board[i][j])
+          }
+        }
+      }
+      let winCons = (matrix) => {
+        for (let i = 0; i < matrix.length; i++) {
+          if (matrix[i].every((element) => { return element === matrix[i][0] }) && matrix[i][0] != ' ') {
+            commit('setWinner', { active: false, winningPlayer: matrix[i][0] })
+          }
+        }
+      }
+      winCons(board);
+      winCons(diags);
+      winCons(cols);
+      console.log(board)
+      commit('setBoard', board)
     },
-    updateBoard({ commit, dispatch }, payload) {
-      commit('setBoard', payload)
-    }
   }
 })

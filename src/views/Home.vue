@@ -1,21 +1,16 @@
 <template>
   <div class="container-fluid ttt">
     <div class="row">
-      <div class="col-6"><button v-on:click="counter += 1">Up</button>{{counter}}</div>
-      <div class="col-6"><button v-on:click="counter -= 1">Down</button>{{counter}}</div>
+      <div :class="[getGameStatus.active ? 'col-6' : 'col-4']"><button v-on:click="counter += 1, status()">Up</button>{{counter}}</div>
+      <div :class="getGameStatus.active ? '' : 'col-4'" v-if="getGameStatus.active === false">{{getGameStatus.winningPlayer}} wins!</div>
+      <div :class="getGameStatus.active ? 'col-6' : 'col-4'"><button v-on:click="counter -= 1">Down</button>{{counter}}</div>
     </div>
-    <div v-for="(board, i) in getBoard" :class="['row', 'sect-' + i]">
-      <div v-for="(element, j) in board" :class="['col-4', 'sect-' + i + '-' + j]" v-on:click="updateBoard(i, j)">{{getBoard[i][j]}}</div>
+    <div class="container tboard">
+      <div v-for="(board, i) in getBoard" :class="['row', 'sect-' + i]">
+        <div v-for="(element, j) in board" :class="['col-4', 'sect-' + i + '-' + j]" v-on:click="updateBoard(i, j)">
+          {{getBoard[i][j]}}</div>
+      </div>
     </div>
-    <!-- <div class="col-4 top-left" v-on:click="updateBoard(0,0)">{{getBoard[0][0]}}</div>
-    <div class="col-4 top-center" v-on:click="updateBoard(0,1)">{{getBoard[0][1]}}</div>
-    <div class="col-4 top-right" v-on:click="updateBoard(0,2)">{{getBoard[0][2]}}</div>
-    <div class="col-4 mid-left" v-on:click="updateBoard(1,0)">{{getBoard[1][0]}}</div>
-    <div class="col-4 mid-center" v-on:click="updateBoard(1,1)">{{getBoard[1][1]}}</div>
-    <div class="col-4 mid-right" v-on:click="updateBoard(1,2)">{{getBoard[1][2]}}</div>
-    <div class="col-4 bottom-left" v-on:click="updateBoard(2,0)">{{getBoard[2][0]}}</div>
-    <div class="col-4 bottom-center" v-on:click="updateBoard(2,1)">{{getBoard[2][1]}}</div>
-    <div class="col-4 bottom-right" v-on:click="updateBoard(2,2)">{{getBoard[2][2]}}</div> -->
   </div>
 </template>
 
@@ -34,6 +29,9 @@
       },
       getTurn() {
         return this.$store.state.playerOneTurn;
+      },
+      getGameStatus() {
+        return this.$store.state.winner;
       }
     },
     methods: {
@@ -44,7 +42,11 @@
           this.playerOne = !this.playerOne
         }
         console.log(board)
-        // this.$store.dispatch("updateBoard", {board: board, player: this.playerOne === true ? "X" : "O"})
+        this.$store.dispatch("updateBoard", board)
+      },
+      status() {
+        console.log(this.getGameStatus)
+        console.log(this.getBoard)
       }
     },
     components: {},
@@ -54,17 +56,28 @@
 </script>
 
 <style>
+  .tboard {
+    border: 2px solid;
+    max-width: 500px;
+
+  }
+
   .sect-0 {
-    height: 25vh;
-    /* width: 20%; */
-  }  
+    height: 10rem;
+    /* width: 50rem; */
+    /* max-width: 500px */
+  }
+
   .sect-1 {
-    height: 25vh;
-    /* width: 20%; */
-  }  
+    height: 10rem;
+    /* max-width: 500px */
+    /* width: 50rem; */
+  }
+
   .sect-2 {
-    height: 25vh;
-    /* width: 20%; */
+    height: 10rem;
+    /* max-width: 500px */
+    /* width: 50rem; */
   }
 
   .sect-0-0 {
