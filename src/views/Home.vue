@@ -1,8 +1,10 @@
 <template>
   <div class="container-fluid ttt">
     <div class="row">
-      <div :class="[getGameStatus.active ? 'col-6' : 'col-4']"><button v-on:click="counter += 1, status()">get status</button></div>
-      <div :class="getGameStatus.active ? '' : 'col-4'" v-if="getGameStatus.active === false">{{getGameStatus.winningPlayer}} wins!</div>
+      <div :class="[getGameStatus.active ? 'col-6' : 'col-4']"><button v-on:click="counter += 1, status()">get
+          status</button></div>
+      <div :class="[getGameStatus.active ? '' : 'col-4', 'winner-text']" v-if="getGameStatus.active === false">
+        {{getGameStatus.winningPlayer}} wins!</div>
       <div :class="getGameStatus.active ? 'col-6' : 'col-4'"><button v-on:click="resetBoard()">New Game</button></div>
     </div>
     <div class="container tboard">
@@ -27,9 +29,6 @@
       getBoard() {
         return this.$store.state.tttBoard;
       },
-      getTurn() {
-        return this.$store.state.playerOneTurn;
-      },
       getGameStatus() {
         return this.$store.state.winner;
       }
@@ -47,7 +46,7 @@
       },
       resetBoard() {
         this.playerOne = true
-        this.$store.dispatch("reset", {board: [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]], active: true})
+        this.$store.dispatch("reset", { board: [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]], active: true })
       },
       status() {
         console.log(this.getGameStatus)
@@ -60,29 +59,28 @@
 
 </script>
 
-<style>
-  .tboard {
-    border: 2px solid;
-    max-width: 500px;
+<style scoped>
+  .winner-text {
+    font-size: 40px;
+    font-weight:bold;
+    color: gold;
+  }
 
+  .tboard {
+    /* border: 2px solid; */
+    max-width: 500px;
   }
 
   .sect-0 {
     height: 10rem;
-    /* width: 50rem; */
-    /* max-width: 500px */
   }
 
   .sect-1 {
     height: 10rem;
-    /* max-width: 500px */
-    /* width: 50rem; */
   }
 
   .sect-2 {
     height: 10rem;
-    /* max-width: 500px */
-    /* width: 50rem; */
   }
 
   .sect-0-0 {

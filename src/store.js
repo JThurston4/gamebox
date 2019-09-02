@@ -6,7 +6,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     tttBoard: [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]],
-    playerOneTurn: "X",
     winner: {active: true, winningPlayer: ''}
 
   },
