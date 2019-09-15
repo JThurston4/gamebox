@@ -2,9 +2,10 @@ const express = require('express');
 const Joi = require('joi');
 const logger = require('./logger.js');
 const authenticator = require('./authenticator.js');
+const helmet = require('helmet');
 const app = express();
 app.use(express.json());
-
+app.use(helmet());
 app.use(logger);
 
 app.use(authenticator);
