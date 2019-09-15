@@ -3,12 +3,25 @@ const Joi = require('joi');
 const logger = require('./logger.js');
 const authenticator = require('./authenticator.js');
 const helmet = require('helmet');
+const morgan = require('morgan');
+const config = require('config');
+
 const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(logger);
-
 app.use(authenticator);
+
+// console.log(`Application Name: ${config.get('name')}`)
+console.log('Application Name: '+ config.get('name'))
+
+console.log(`NODE_ENV is ${process.env.NODE_ENV}`)
+console.log(`app:: ${app.get('env')}`);
+
+if (app.get('env') === 'development') {
+  app.use(morgan('tiny'));
+  console.log('morgan enabled')
+}
 
 const games = [
   { id: 1, game: "tic tac toe" },
