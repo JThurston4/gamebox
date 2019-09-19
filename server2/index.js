@@ -9,11 +9,14 @@ const Debug = require('debug')('server/index.js');
 const games = require('./routes/games.js');
 const home = require('./routes/home.js');
 
-const app = express();
+const app = express(); 
+
 app.use(express.json());
 app.use(helmet());
 app.use(logger);
 app.use(authenticator);
+
+require('./db/mlab-config.js');
 
 app.use('/', home);
 app.use('/api/games', games);

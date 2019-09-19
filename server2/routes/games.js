@@ -1,6 +1,7 @@
 const express = require('express');
 const Joi = require('joi');
 const router = express.Router();
+const TttGame = require('../models/ticTacToe')
 
 const games = [
   { id: 1, game: "tic tac toe" },
@@ -8,7 +9,7 @@ const games = [
   { id: 3, game: "chess" },
 ]
 
-router.get('', (req, res) => {
+router.get('/', (req, res) => {
   res.send([1, 2, 3, 4, 5])
 })
 
@@ -22,17 +23,17 @@ router.get('/:id', (req, res) => {
 
 
 router.post('', (req, res) => {
-
-  const { error } = validateGame(req.body);
+  const { error } = validateTTT(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
-  const game = {
-    id: games.length + 1,
-    game: req.body.game
-  }
-  games.push(game);
-  res.send(game);
+  TttGame.create(req.body)
+    .then(newGame => {
+      res.send(newGame);
+    })
+    .catch(err => {
+      console.log(err);
+  })
 })
 
 router.put('/:id', (req, res) => {
@@ -41,7 +42,7 @@ router.put('/:id', (req, res) => {
     return res.status(404).send('The game with the given id was not found')
   }
 
-  const { error } = validateGame(req.body);
+  const { error } = validateTTT(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
@@ -62,9 +63,12 @@ router.delete('/:id', (req, res) => {
   res.send(game)
 })
 
-function validateGame(game) {
+function validateTTT(game) {
   const schema = {
-    game: Joi.string().min(3).required()
+    board: Joi.array(),
+    created: Joi.date(),
+    lastSaved: Joi.date(),
+    playerOneTurn: Joi.bool().required()
   }
 
   return Joi.validate(game, schema)
