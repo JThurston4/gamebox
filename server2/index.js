@@ -1,12 +1,11 @@
 const express = require('express');
-const Joi = require('joi');
 const logger = require('./middleware/logger.js');
 const authenticator = require('./middleware/authenticator.js');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('config');
 const Debug = require('debug')('server/index.js');
-const games = require('./routes/games.js');
+const ticTacToe = require('./routes/ticTacToe.js');
 const home = require('./routes/home.js');
 
 const app = express(); 
@@ -19,7 +18,7 @@ app.use(authenticator);
 require('./db/mlab-config.js');
 
 app.use('/', home);
-app.use('/api/games', games);
+app.use('/api/games/tictactoe', ticTacToe);
 // console.log(`Application Name: ${config.get('name')}`)
 console.log('Application Name: '+ config.get('name'))
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Joi = require('joi');
 let ObjectId = mongoose.Schema.Types.ObjectId;
 
 const ticTacToeSchema = new mongoose.Schema({
@@ -9,4 +10,16 @@ const ticTacToeSchema = new mongoose.Schema({
   playerOneTurn: { type: Boolean, required: true}
 })
 
-module.exports = mongoose.model('TttGame', ticTacToeSchema)
+function validateTTT(game) {
+  const schema = {
+    board: Joi.array(),
+    created: Joi.date(),
+    lastSaved: Joi.date(),
+    playerOneTurn: Joi.bool().required()
+  }
+
+  return Joi.validate(game, schema)
+}
+
+module.exports.TicTacToe = mongoose.model('TicTacToeGame', ticTacToeSchema)
+module.exports.validateTTT = validateTTT

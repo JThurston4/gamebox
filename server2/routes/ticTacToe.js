@@ -1,7 +1,6 @@
 const express = require('express');
-const Joi = require('joi');
 const router = express.Router();
-const TttGame = require('../models/ticTacToe')
+const {validateTTT, TicTacToe} = require('../models/ticTacToe')
 
 const games = [
   { id: 1, game: "tic tac toe" },
@@ -27,7 +26,7 @@ router.post('', (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
-  TttGame.create(req.body)
+  TicTacToe.create(req.body)
     .then(newGame => {
       res.send(newGame);
     })
@@ -62,16 +61,5 @@ router.delete('/:id', (req, res) => {
 
   res.send(game)
 })
-
-function validateTTT(game) {
-  const schema = {
-    board: Joi.array(),
-    created: Joi.date(),
-    lastSaved: Joi.date(),
-    playerOneTurn: Joi.bool().required()
-  }
-
-  return Joi.validate(game, schema)
-}
 
 module.exports = router
