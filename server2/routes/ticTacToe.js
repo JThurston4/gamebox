@@ -13,11 +13,13 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-  const game = games.find(g => g.id === Number.parseInt(req.params.id))
-  if (!game) {
-    return res.status(404).send('The game with the given id was not found')
-  }
-  res.send(game.game)
+  TicTacToe.findById(req.params.id)
+    .then((game) => {
+      res.send(game);
+    })
+    .catch((err) => {
+      return res.status(404).send(console.log("no game found"))
+    })
 })
 
 
@@ -36,30 +38,32 @@ router.post('', (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
-  const game = games.find(g => g.id === Number.parseInt(req.params.id))
-  if (!game) {
-    return res.status(404).send('The game with the given id was not found')
-  }
-
   const { error } = validateTTT(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
-
-  game.game = req.body.game;
-  res.send(game);
+  // TicTacToe.findByIdAndUpdate(req.params.id, req.body)
+  //   .then((gamee) => res.send(gamee))
+  //   .catch((err => console.log(err)))
+  TicTacToe.findById(req.params.id)
+    .then((game) => {
+      game.update(req.body, (err) => { return console.log(err) })
+      res.send(game)
+    })
 })
 
 router.delete('/:id', (req, res) => {
-  const game = games.find(g => g.id === Number.parseInt(req.params.id))
-  if (!game) {
-    res.status(404).send('The game with the given id was not found')
-  }
+  // const game = games.find(g => g.id === Number.parseInt(req.params.id))
+  // if (!game) {
+  //   res.status(404).send('The game with the given id was not found')
+  // }
 
-  const index = games.indexOf(game)
-  games.splice(index, 1)
-
-  res.send(game)
+  TicTacToe.findById(req.params.id)
+    .then((game) => {
+      game.remove((err) => { return console.log(err) })
+      res.send("Sucessfully Deleted")
+    })
+    .catch((err) => {return res.status(404).send(console.log(err.message))})
 })
 
 module.exports = router
