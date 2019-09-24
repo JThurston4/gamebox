@@ -17,9 +17,7 @@ router.get('/:id', (req, res) => {
     .then((game) => {
       res.send(game);
     })
-    .catch((err) => {
-      return res.status(404).send(console.log("no game found"))
-    })
+    .catch (() => res.status(404).send("The game with the given id does not exist"))
 })
 
 
@@ -32,9 +30,7 @@ router.post('', (req, res) => {
     .then(newGame => {
       res.send(newGame);
     })
-    .catch(err => {
-      console.log(err);
-  })
+    .catch(() => res.status(404).send("Something went wrong"))
 })
 
 router.put('/:id', (req, res) => {
@@ -50,6 +46,7 @@ router.put('/:id', (req, res) => {
       game.update(req.body, (err) => { return console.log(err) })
       res.send(game)
     })
+  .catch(() => res.status(404).send("The game with the given id does not exist"))
 })
 
 router.delete('/:id', (req, res) => {
@@ -63,7 +60,7 @@ router.delete('/:id', (req, res) => {
       game.remove((err) => { return console.log(err) })
       res.send("Sucessfully Deleted")
     })
-    .catch((err) => {return res.status(404).send(console.log(err.message))})
+    .catch(() => res.status(404).send("The game with the given id does not exist"))
 })
 
 module.exports = router
