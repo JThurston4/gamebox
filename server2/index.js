@@ -7,6 +7,7 @@ const config = require('config');
 const Debug = require('debug')('server/index.js');
 const ticTacToe = require('./routes/ticTacToe.js');
 const home = require('./routes/home.js');
+const user = require('./routes/users');
 
 const app = express(); 
 
@@ -19,6 +20,7 @@ require('./db/mlab-config.js');
 
 app.use('/', home);
 app.use('/api/games/tictactoe', ticTacToe);
+app.use('/api/users', user);
 // console.log(`Application Name: ${config.get('name')}`)
 console.log('Application Name: '+ config.get('name'))
 
