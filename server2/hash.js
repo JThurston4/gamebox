@@ -6,4 +6,10 @@ async function run() {
   console.log(salt)
   console.log(hashed)
 }
-run();
+
+async function testHash() {
+  const hash = await bcrypt.hash('abcd', 5)
+  console.log(hash)
+}
+testHash()
+// run();

@@ -1,7 +1,10 @@
 const { User, validate } = require('../models/user');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const mongoose = require('mongoose');
 const express = require('express');
 const _ = require('lodash');
+const bcrypt = require('bcrypt');
 const router = express.Router()
 
 router.post('/', async (req, res) => {
@@ -25,9 +28,13 @@ router.post('/', async (req, res) => {
   // same thing
   // user = new User(_.pick(req.body, ['name', 'email', 'password']))
   
-  await user.save();
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt)
 
-  res.send(_.pick(user,['_id', 'name', 'email']))
+  await user.save();
+  const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+
+  res.header('x-auth-token', token).send(_.pick(user,['_id', 'name', 'email']))
 
 })
 
