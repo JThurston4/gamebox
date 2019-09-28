@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const config = require('config');
 const mongoose = require('mongoose');
 const express = require('express');
-const _ = require('lodash');
+// const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const router = express.Router()
 
@@ -38,11 +38,13 @@ router.post('/register', async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   // @ts-ignore
   user.password = await bcrypt.hash(user.password, salt)
+  await user.save();
   req.session.uid = user._id
   req.session.name = user.name
-  await user.save();
-
-  res.send(_.pick(user, ['_id', 'name', 'email']))
+  delete user._doc.password;
+  
+  res.send(user)
+  // res.send(_.pick(user, ['_id', 'name', 'email']))
 })
 
 router.post('/login', async (req, res) => {
@@ -57,9 +59,7 @@ router.post('/login', async (req, res) => {
   if (!validPassword)
     return res.status(400).send('Invalid email or password')
 
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt)
-
+  delete user._doc.password;
   req.session.uid = user._id;
   req.session.name = user.name;
   await user.save()
@@ -70,10 +70,20 @@ router.post('/login', async (req, res) => {
 
 router.delete('/logout', (req, res) => {
   req.session.destroy(err => {
-    if (err) 
+    if (err) {
       return res.send(err)
+    }
     return res.send('Logout successful')
   })
+})
+
+router.get('/authenticate', async (req, res) => {
+  let user = await User.findById(req.session.uid);
+  if (!user) 
+    return res.status(401).send('Please login to continue')
+  
+  delete user._doc.password;
+  res.send(user)
 })
 
 module.exports = {router, session}

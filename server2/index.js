@@ -23,9 +23,19 @@ app.use(logger);
 require('./db/mlab-config.js');
 
 app.use('/', home);
-app.use('/api/games/tictactoe', ticTacToe);
 app.use(user.session)
 app.use('/api/users', user.router);
+
+app.use((req, res, next) => {
+  if (!req.session.uid) {
+    return res.status(401).send({
+      error: 'please login to continue'
+    })
+  }
+  next()
+})
+
+app.use('/api/games/tictactoe', ticTacToe);
 app.use('/api/auth', auth);
 // console.log(`Application Name: ${config.get('name')}`)
 console.log('Application Name: '+ config.get('name'))
