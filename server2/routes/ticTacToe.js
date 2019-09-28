@@ -1,7 +1,7 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const router = express.Router();
-const { validateTTT, TicTacToe } = require('../models/ticTacToe');
+const { validateTTT, TicTacToe, determineWinner } = require('../models/ticTacToe');
 
 router.get('/', (req, res) => {
   res.send([1, 2, 3, 4, 5])
@@ -33,6 +33,8 @@ router.put('/:id', (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
+
+  determineWinner(req.body)
   // TicTacToe.findByIdAndUpdate(req.params.id, req.body)
   //   .then((gamee) => res.send(gamee))
   //   .catch((err => console.log(err)))

@@ -1,12 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios';
 
 Vue.use(Vuex)
 
+let production = !window.location.host.includes('localhost')
+let baseUrl = production ? "we'll get there when we get there" : 'localhost:7000';
+
+let api = axios.create({
+  baseUrl,
+  timeout: 3000,
+  withCredentials: true
+})
+
 export default new Vuex.Store({
   state: {
-    tttBoard: [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]],
-    winner: {active: true, winningPlayer: ''}
+    tttGame: [],
 
   },
   mutations: {
@@ -23,31 +32,8 @@ export default new Vuex.Store({
   },
   actions: {
     updateBoard({ commit, dispatch }, board) {
-      let cols = [[], [], []];
-      let diags = [[], []]
-
-      for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
-          cols[j].push(board[i][j])
-          if (i === j) {
-            diags[0].push(board[i][j])
-          }
-          if (i + j === 2) {
-            diags[1].push(board[i][j])
-          }
-        }
-      }
-      let winCons = (matrix) => {
-        for (let i = 0; i < matrix.length; i++) {
-          if (matrix[i].every((element) => { return element === matrix[i][0] }) && matrix[i][0] != ' ') {
-            commit('setWinner', { active: false, winningPlayer: matrix[i][0] })
-          }
-        }
-      }
-      winCons(board);
-      winCons(diags);
-      winCons(cols);
-      commit('setBoard', board)
+      
+      // commit('setBoard', board)
     },
     reset({ commit }, payload) {
       commit('setNewGame', payload)
