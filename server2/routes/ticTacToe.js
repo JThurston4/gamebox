@@ -1,12 +1,7 @@
 const express = require('express');
+const auth = require('../middleware/auth');
 const router = express.Router();
-const {validateTTT, TicTacToe} = require('../models/ticTacToe')
-
-const games = [
-  { id: 1, game: "tic tac toe" },
-  { id: 2, game: "connect 4" },
-  { id: 3, game: "chess" },
-]
+const { validateTTT, TicTacToe } = require('../models/ticTacToe');
 
 router.get('/', (req, res) => {
   res.send([1, 2, 3, 4, 5])
@@ -21,7 +16,7 @@ router.get('/:id', (req, res) => {
 })
 
 
-router.post('', (req, res) => {
+router.post('', auth, (req, res) => {
   const { error } = validateTTT(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message)

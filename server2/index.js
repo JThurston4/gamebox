@@ -1,6 +1,5 @@
 const express = require('express');
 const logger = require('./middleware/logger.js');
-const authenticator = require('./middleware/authenticator.js');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('config');
@@ -20,7 +19,6 @@ if (!config.get('jwtPrivateKey')) {
 app.use(express.json());
 app.use(helmet());
 app.use(logger);
-app.use(authenticator);
 
 require('./db/mlab-config.js');
 
