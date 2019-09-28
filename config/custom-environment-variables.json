@@ -1,4 +1,4 @@
 {
   "name": "Gridbox Games - custom",
-  "jwtPrivateKey": "gridbox_jwtPrivateKey"
+  "privateKey": "gridbox_privateKey"
 }

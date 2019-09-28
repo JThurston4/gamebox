@@ -1,5 +1,6 @@
-const { User, validate } = require('../models/user');
+const { User, validateLogin, validateUser } = require('../models/user');
 const jwt = require('jsonwebtoken');
+const session = require('../db/session');
 const auth = require('../middleware/auth');
 const config = require('config');
 const mongoose = require('mongoose');
@@ -9,13 +10,13 @@ const bcrypt = require('bcrypt');
 const router = express.Router()
 
 
-router.get('/me', auth, async (req, res) => {
+router.get('/me', async (req, res) => {
   const user = await User.findById(req.user._id).select('-password');
   res.send(user);
 })
 
-router.post('/', async (req, res) => {
-  const { error } = validate(req.body)
+router.post('/register', async (req, res) => {
+  const { error } = validateUser(req.body)
   if (error)
     return res.status(400).send(error.details[0].message)
   
@@ -34,17 +35,45 @@ router.post('/', async (req, res) => {
   })
   // same thing
   // user = new User(_.pick(req.body, ['name', 'email', 'password']))
-  
   const salt = await bcrypt.genSalt(10);
   // @ts-ignore
   user.password = await bcrypt.hash(user.password, salt)
-
+  req.session.uid = user._id
+  req.session.name = user.name
   await user.save();
-  // @ts-ignore
-  const token = user.generateAuthToken()
 
-  res.header('x-auth-token', token).send(_.pick(user,['_id', 'name', 'email']))
-
+  res.send(_.pick(user, ['_id', 'name', 'email']))
 })
 
-module.exports = router
+router.post('/login', async (req, res) => {
+  const { error } = validateLogin(req.body)
+  if (error)
+    return res.status(400).send(error.details[0].message);
+  let user = await User.findOne({ email: req.body.email })
+  if (!user)
+    return res.status(400).send('Invalid email or password')
+  
+  const validPassword = await bcrypt.compare(req.body.password, user.password)
+  if (!validPassword)
+    return res.status(400).send('Invalid email or password')
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt)
+
+  req.session.uid = user._id;
+  req.session.name = user.name;
+  await user.save()
+
+  // res.send(_.pick(user, ['_id', 'name', 'email']))
+  res.send(user)
+})
+
+router.delete('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) 
+      return res.send(err)
+    return res.send('Logout successful')
+  })
+})
+
+module.exports = {router, session}

@@ -11,7 +11,7 @@ const auth = require('./routes/auth');
 
 const app = express(); 
 
-if (!config.get('jwtPrivateKey')) {
+if (!config.get('privateKey')) {
   console.log(`FATAL ERROR: jwtPrivateKey is not defined.`)
   process.exit(1);
 }
@@ -24,9 +24,9 @@ require('./db/mlab-config.js');
 
 app.use('/', home);
 app.use('/api/games/tictactoe', ticTacToe);
-app.use('/api/users', user);
+app.use(user.session)
+app.use('/api/users', user.router);
 app.use('/api/auth', auth);
-
 // console.log(`Application Name: ${config.get('name')}`)
 console.log('Application Name: '+ config.get('name'))
 
