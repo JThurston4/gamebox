@@ -17,7 +17,8 @@ let api = axios.create({
 
 export default new Vuex.Store({
   state: {
-    tttGame: [],
+    tttGame: {},
+    user: {}
 
   },
   mutations: {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     setWinner(state, winner) {
       state.winner = winner
+    },
+    setUser(state, user) {
+      state.user = user
     }
   },
   actions: {

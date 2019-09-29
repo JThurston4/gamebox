@@ -1,18 +1,28 @@
 <template>
   <div class="container-fluid ttt">
-    <div class="row">
-      <div :class="[getGameStatus.active ? 'col-6' : 'col-4']"><button v-on:click="counter += 1, status()">get
-          status</button></div>
+    <div class="toT">
+      <router-link :to="{name: 'ttt'}">
+        <h1>click me</h1>
+      </router-link>
+    </div>
+    <!-- <div class="row">
+      <div :class="[getGameStatus.active ? 'col-6' : 'col-4']">
+        <button v-on:click="counter += 1, status()">get status</button>
+      </div>
       <div :class="[getGameStatus.active ? '' : 'col-4', 'winner-text']" v-if="getGameStatus.active === false">
-        {{getGameStatus.winningPlayer}} wins!</div>
-      <div :class="getGameStatus.active ? 'col-6' : 'col-4'"><button v-on:click="newGame()">New Game</button></div>
+        {{getGameStatus.winningPlayer}} wins!
+      </div>
+      <div :class="getGameStatus.active ? 'col-6' : 'col-4'">
+        <button v-on:click="newGame()">New Game</button>
+      </div>
     </div>
     <div class="container tboard">
       <div v-for="(board, i) in getBoard" :class="['row', 'sect-' + i]">
         <div v-for="(element, j) in board" :class="['col-4', 'sect-' + i + '-' + j]" v-on:click="updateBoard(i, j)">
-          {{getBoard[i][j]}}</div>
+          {{getBoard[i][j]}}
+        </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -27,11 +37,8 @@
     },
     computed: {
       getBoard() {
-        return this.$store.state.tttBoard;
+        return this.$store.state.tttGame;
       },
-      getGameStatus() {
-        return this.$store.state.winner;
-      }
     },
     methods: {
       updateBoard(mIndex, aIndex) {
@@ -60,6 +67,14 @@
 </script>
 
 <style scoped>
+  .toT{
+    height: 20vh;
+    background-color: yellow;
+  }
+  .ttt{
+    height: 50vh;
+    background-color: red;
+  }
   .winner-text {
     font-size: 40px;
     font-weight:bold;
@@ -67,7 +82,7 @@
   }
 
   .tboard {
-    /* border: 2px solid; */
+    border: 2px solid;
     max-width: 500px;
   }
 
