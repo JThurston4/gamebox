@@ -15,6 +15,7 @@ const ticTacToeSchema = new mongoose.Schema({
 function validateTTT(game) {
   const schema = {
     board: Joi.array(),
+    author: Joi.string(),
     created: Joi.date(),
     lastSaved: Joi.date(),
     playerOneTurn: Joi.bool().required(),

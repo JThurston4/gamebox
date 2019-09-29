@@ -5,7 +5,7 @@
           status</button></div>
       <div :class="[getGameStatus.active ? '' : 'col-4', 'winner-text']" v-if="getGameStatus.active === false">
         {{getGameStatus.winningPlayer}} wins!</div>
-      <div :class="getGameStatus.active ? 'col-6' : 'col-4'"><button v-on:click="resetBoard()">New Game</button></div>
+      <div :class="getGameStatus.active ? 'col-6' : 'col-4'"><button v-on:click="newGame()">New Game</button></div>
     </div>
     <div class="container tboard">
       <div v-for="(board, i) in getBoard" :class="['row', 'sect-' + i]">
@@ -44,9 +44,9 @@
           this.$store.dispatch("updateBoard", board)
         }
       },
-      resetBoard() {
+      newGame() {
         this.playerOne = true
-        this.$store.dispatch("reset", { board: [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]], active: true })
+        this.$store.dispatch("newGameTTT")
       },
       status() {
         console.log(this.getGameStatus)
