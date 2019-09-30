@@ -8,6 +8,7 @@ const ticTacToe = require('./routes/ticTacToe.js');
 const home = require('./routes/home.js');
 const user = require('./routes/users');
 const auth = require('./routes/auth');
+const cors = require('cors');
 
 const app = express(); 
 
@@ -15,6 +16,16 @@ if (!config.get('privateKey')) {
   console.log(`FATAL ERROR: jwtPrivateKey is not defined.`)
   process.exit(1);
 }
+
+var whitelist = ['http://localhost:8080'];
+var corsOptions = {
+  origin: function (origin, callback) {
+    var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+    callback(null, originIsWhitelisted);
+  },
+  credentials: true
+};
+app.use(cors(corsOptions))
 
 app.use(express.json());
 app.use(helmet());

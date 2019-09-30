@@ -39,8 +39,10 @@ export default new Vuex.Store({
   actions: {
     //#region users
     register({ commit }, newUser) {
+      debugger
       api.post('users/register', newUser)
         .then(res => {
+          debugger
           commit('setUser', res.data)
           router.push({ name: 'home' })
         })
