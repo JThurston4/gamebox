@@ -24,12 +24,9 @@
           <div class="container">
             <div class="centered row">
               <div class="col-lg-8"></div>
-              <router-link :to="{name: 'login'}" class="col-lg-2 col-md-12 login" v-if="!getUser._id">
-                <button class="btn btn-outline-success" href="#">Login</button>
+              <router-link :to="{name: 'login'}" class="col-lg-4 col-md-12 login" v-if="!getUser._id">
+                <button class="btn btn-outline-success" href="#">Login / Sign up</button>
               </router-link>
-              <div class="col-lg-2 col-md-12 register" data-toggle="modal" data-target="#register" v-if="!getUser._id">
-                <button class="btn btn-secondary" href="#">Register</button>
-              </div>
               <div class="col-lg-4 col-md-12 login" v-if="getUser._id">
                 <button class="btn btn-outline-danger" href="#">Logout</button>
               </div>
@@ -50,25 +47,25 @@
             </button>
           </div>
           <div class="modal-body">
-            <form>
+            <form v-on:submit.prevent="registerUser">
               <div class="row bottom-pad">
-                <label class="col-4" for="email">Email</label>
-                <input type="text" class="col-6" placeholder="Email" id="email">
+                <label class="col-4" for="email" >Email</label>
+                <input type="text" class="col-6" v-model="regUser.email" placeholder="Email" id="email">
               </div>
               <div class="row bottom-pad">
-                <label class="col-4" for="username">Username</label>
-                <input type="text" class="col-6" placeholder="Username" id="username">
+                <label class="col-4" for="username" >Username</label>
+                <input type="text" class="col-6" v-model="regUser.name" placeholder="Username" id="username">
               </div>
               
               <div class="row">
-                <label class="col-4" for="password">Password</label>
-                <input type="password" class="col-6" placeholder="Password" id="password">
+                <label class="col-4" for="password" >Password</label>
+                <input type="password" class="col-6" v-model="regUser.password" placeholder="Password" id="password">
               </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
           </div>
         </div>
       </div>
@@ -81,7 +78,11 @@
     name: 'App',
     data() {
       return {
-
+        regUser: {
+          name: "",
+          email: "",
+          password: ""
+        }
       }
     },
     computed: {
@@ -89,14 +90,19 @@
         return this.$store.state.user;
       }
     },
-    methods: {},
+    methods: {
+      registerUser() {
+        console.log(this.regUser)
+        
+      }
+    },
     components: {},
     props: [],
   }
 
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -129,10 +135,6 @@
 
 label {
   padding-right: 10px;
-}
-
-.bottom-pad {
-  padding-bottom: 10px;
 }
 
 @media (min-width: 992px) {
