@@ -68,8 +68,9 @@ export default new Vuex.Store({
     },
     //#endregion
 
-    updateBoard({ commit, dispatch }, board) {
-      // commit('setBoard', board)
+    updateBoard({ commit, dispatch }, game) {
+      api.put('games/tictactoe', game)
+        .then(res => commit('setGame', res.data))
     },
     newGameTTT({ commit }, game) {
       api.post('games/tictactoe', game)

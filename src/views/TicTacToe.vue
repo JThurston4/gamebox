@@ -27,7 +27,6 @@
     data() {
       return {
         counter: 0,
-        playerOne: true
       }
     },
     computed: {
@@ -38,22 +37,24 @@
     },
     methods: {
       updateBoard(mIndex, aIndex) {
-        if (this.getGameStatus.active) {
-          let board = this.getBoard
+        if (this.getGame.active) {
+          let board = this.getGame.board
           if (board[mIndex][aIndex] === " ") {
-            board[mIndex].splice(aIndex, 1, this.playerOne === true ? "X" : "O")
-            this.playerOne = !this.playerOne
+            board[mIndex].splice(aIndex, 1, this.getGame.playerOneTurn === true ? "X" : "O")
+            this.getGame.board = board;
+            this.getGame.playerOneTurn = !this.getGame.playerOneTurn;
+            this.getGame.lastSaved = Date.now();
           }
-          this.$store.dispatch("updateBoard", board)
+          console.log(this.getGame)
+          this.$store.dispatch("updateBoard", this.getGame)
         }
       },
       newGame() {
-        this.playerOne = true
         this.$store.dispatch("newGameTTT", { playerOneTurn: true })
       },
       status() {
         console.log(this.getBoard)
-      }
+      },
     },
     components: {},
     props: [],
