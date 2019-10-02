@@ -8,6 +8,7 @@ const express = require('express');
 // const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const router = express.Router()
+const Debug = require('debug')('server/routes/users.js');
 
 
 router.get('/me', async (req, res) => {
@@ -50,7 +51,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { error } = validateLogin(req.body)
   if (error)
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send(error.details[0].message + 'ruh roh');
   let user = await User.findOne({ email: req.body.email })
   if (!user)
     return res.status(400).send('Invalid email or password')
@@ -59,10 +60,13 @@ router.post('/login', async (req, res) => {
   if (!validPassword)
     return res.status(400).send('Invalid email or password')
 
-  delete user._doc.password;
   req.session.uid = user._id;
   req.session.name = user.name;
+  
+  Debug(`user :: $${user}`)
+  
   await user.save()
+  delete user._doc.password;
 
   // res.send(_.pick(user, ['_id', 'name', 'email']))
   res.send(user)

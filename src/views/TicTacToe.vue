@@ -1,23 +1,23 @@
 <template>
-  <div class="container-fluid ttt">
-    <!-- <div class="row">
-      <div :class="[getGameStatus.active ? 'col-6' : 'col-4']">
+  <div class="container-fluid">
+    <div class="row">
+      <div :class="[getGame.active ? 'col-6' : 'col-4']">
         <button v-on:click="counter += 1, status()">get status</button>
       </div>
-      <div :class="[getGameStatus.active ? '' : 'col-4', 'winner-text']" v-if="getGameStatus.active === false">
-        {{getGameStatus.winningPlayer}} wins!
+      <div :class="[getGame.active ? '' : 'col-4', 'winner-text']" v-if="getGame.active === false">
+        {{getGame.winningPlayer}} wins!
       </div>
-      <div :class="getGameStatus.active ? 'col-6' : 'col-4'">
+      <div :class="getGame.active ? 'col-6' : 'col-4'">
         <button v-on:click="newGame()">New Game</button>
       </div>
     </div>
     <div class="container tboard">
-      <div v-for="(board, i) in getBoard" :class="['row', 'sect-' + i]">
+      <div v-for="(board, i) in getGame.board" :class="['row', 'sect-' + i]">
         <div v-for="(element, j) in board" :class="['col-4', 'sect-' + i + '-' + j]" v-on:click="updateBoard(i, j)">
-          {{getBoard[i][j]}}
+          {{getGame.board[i][j]}}
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -31,7 +31,8 @@
       }
     },
     computed: {
-      getBoard() {
+      getGame() {
+        console.log(this.$store.state.tttGame)
         return this.$store.state.tttGame;
       },
     },
@@ -48,24 +49,23 @@
       },
       newGame() {
         this.playerOne = true
-        this.$store.dispatch("newGameTTT")
+        this.$store.dispatch("newGameTTT", { playerOneTurn: true })
       },
       status() {
-        console.log(this.getGameStatus)
         console.log(this.getBoard)
       }
     },
     components: {},
     props: [],
+    mounted: function() {
+      this.$store.dispatch('newGameTTT', {playerOneTurn: true})
+    }
+    
   }
 
 </script>
 
 <style scoped>
-  .ttt{
-    height: 50vh;
-    background-color: green;
-  }
   .winner-text {
     font-size: 40px;
     font-weight: bold;

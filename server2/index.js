@@ -39,6 +39,7 @@ app.use('/api/users', user.router);
 
 app.use((req, res, next) => {
   if (!req.session.uid) {
+    console.log(req.session.uid)
     return res.status(401).send({
       error: 'please login to continue'
     })
@@ -47,7 +48,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/api/games/tictactoe', ticTacToe);
-app.use('/api/auth', auth);
+// app.use('/api/auth', auth);
 // console.log(`Application Name: ${config.get('name')}`)
 console.log('Application Name: '+ config.get('name'))
 

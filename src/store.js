@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 let production = !window.location.host.includes('localhost')
 // let baseUrl = production ? "we'll get there when we get there" : 'localhost:9001/api';
-let baseUrl = 'localhost:9001/api';
+let baseUrl = '//localhost:9001/api';
 
 let api = axios.create({
   baseURL: baseUrl,
@@ -22,9 +22,8 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    setNewGame(state, payload) {
-      state.tttBoard = payload.board;
-      state.winner.active = payload.active
+    setGame(state, payload) {
+      state.tttGame = payload;
     },
     setBoard(state, board) {
       state.tttBoard = board
@@ -39,7 +38,6 @@ export default new Vuex.Store({
   actions: {
     //#region users
     register({ commit }, newUser) {
-      debugger
       api.post('users/register', newUser)
         .then(res => {
           debugger
@@ -58,8 +56,8 @@ export default new Vuex.Store({
       api.post('users/login', creds)
         .then(res => {
           commit('setUser', res.data)
+          router.push({name: 'home'})
         })
-      router.push({name: 'home'})
     },
     logout({ commit }) {
       api.delete('users/logout')
@@ -73,8 +71,8 @@ export default new Vuex.Store({
     updateBoard({ commit, dispatch }, board) {
       // commit('setBoard', board)
     },
-    newGameTTT({ commit }) {
-      api.post('games/tictactoe')
+    newGameTTT({ commit }, game) {
+      api.post('games/tictactoe', game)
         .then(res => commit('setGame', res.data))
     }
     // async newGameTTT({ commit }) {

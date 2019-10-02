@@ -59,6 +59,9 @@
     methods: {
       registerUser() {
         this.$store.dispatch('register', this.regUser)
+      },
+      loginUser() {
+        this.$store.dispatch('login', this.signIn)
       }
     },
     components: {},
