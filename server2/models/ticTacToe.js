@@ -30,14 +30,14 @@ function determineWinner(game) {
   let cols = [[], [], []];
   let diags = [[], []]
 
-  for (let i = 0; i < game.length; i++) {
-    for (let j = 0; j < game[i].length; j++) {
-      cols[j].push(game[i][j])
+  for (let i = 0; i < game.board.length; i++) {
+    for (let j = 0; j < game.board[i].length; j++) {
+      cols[j].push(game.board[i][j])
       if (i === j) {
-        diags[0].push(game[i][j])
+        diags[0].push(game.board[i][j])
       }
       if (i + j === 2) {
-        diags[1].push(game[i][j])
+        diags[1].push(game.board[i][j])
       }
     }
   }
@@ -46,13 +46,13 @@ function determineWinner(game) {
       if (matrix[i].every((element) => { return element === matrix[i][0] }) && matrix[i][0] != ' ') {
         game.active = false;
         game.winningPlayer = matrix[i][0]
-        return game
       }
     }
   }
-  winCons(game);
+  winCons(game.board);
   winCons(diags);
   winCons(cols);
+  return game
 }
 
 module.exports.TicTacToe = mongoose.model('TicTacToeGame', ticTacToeSchema)

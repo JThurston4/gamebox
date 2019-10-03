@@ -23,6 +23,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setGame(state, payload) {
+      debugger
       state.tttGame = payload;
     },
     setBoard(state, board) {
@@ -69,7 +70,8 @@ export default new Vuex.Store({
     //#endregion
 
     updateBoard({ commit, dispatch }, game) {
-      api.put('games/tictactoe', game)
+      console.log(JSON.stringify(game, null, 2))
+      api.put(`games/tictactoe/${game._id}`, game)
         .then(res => commit('setGame', res.data))
     },
     newGameTTT({ commit }, game) {
