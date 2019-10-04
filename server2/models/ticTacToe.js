@@ -9,7 +9,8 @@ const ticTacToeSchema = new mongoose.Schema({
   lastSaved: { type: Date, default: Date.now() },
   playerOneTurn: { type: Boolean, required: true },
   active: { type: Boolean, required: true, default: true },
-  winningPlayer: {type: String}
+  winningPlayer: { type: String },
+  tie: {type: Boolean, required: true, default: false}
 })
 
 function validateTTT(game) {
@@ -20,7 +21,10 @@ function validateTTT(game) {
     lastSaved: Joi.date(),
     playerOneTurn: Joi.bool().required(),
     active: Joi.bool(),
-    winningPlayer: Joi.string()
+    winningPlayer: Joi.string(),
+    tie: Joi.bool(),
+    _id: Joi.string(),
+    __v: Joi.number()
   }
 
   return Joi.validate(game, schema)
@@ -49,9 +53,20 @@ function determineWinner(game) {
       }
     }
   }
+  let tie = (matrix) => {
+    const flatBoard = matrix.reduce((acc, curr) => {
+      return acc.concat(curr)
+    })
+    if (flatBoard.every((element) => { return element === 'X' || element === 'O' })) {
+      game.active = false;
+      game.tie = true;
+    }
+  }
+
   winCons(game.board);
   winCons(diags);
   winCons(cols);
+  tie(game.board);
   return game
 }
 

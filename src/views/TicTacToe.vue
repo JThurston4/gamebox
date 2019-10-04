@@ -1,13 +1,16 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div :class="[getGame.active ? 'col-6' : 'col-4']">
-        <button v-on:click="counter += 1, status()">get status</button>
-      </div>
-      <div :class="[getGame.active ? '' : 'col-4', 'winner-text']" v-if="getGame.active === false">
+      <div :class="['col-12', 'winner-text']" v-if="!!getGame.winningPlayer">
         {{getGame.winningPlayer}} wins!
       </div>
-      <div :class="getGame.active ? 'col-6' : 'col-4'">
+      <div :class="['col-12', 'tie-text']" v-if="getGame.tie">
+        Cats game!
+      </div>
+      <div :class="['col-12', 'invalid']" v-if="invalid">
+        Invalid move, please try again
+      </div>
+      <div :class="'col-12'">
         <button v-on:click="newGame()">New Game</button>
       </div>
     </div>
@@ -27,6 +30,7 @@
     data() {
       return {
         counter: 0,
+        invalid: false
       }
     },
     computed: {
@@ -39,14 +43,18 @@
       updateBoard(mIndex, aIndex) {
         if (this.getGame.active) {
           let board = this.getGame.board
-          if (board[mIndex][aIndex] === " ") {
+          if (board[mIndex][aIndex] != " ") {
+            this.invalid = true
+          } else {
+            this.invalid = false
             board[mIndex].splice(aIndex, 1, this.getGame.playerOneTurn === true ? "X" : "O")
             this.getGame.board = board;
             this.getGame.playerOneTurn = !this.getGame.playerOneTurn;
             this.getGame.lastSaved = Date.now();
+            console.log(this.getGame)
+            this.$store.dispatch("updateBoard", this.getGame)
           }
-          console.log(this.getGame)
-          this.$store.dispatch("updateBoard", this.getGame)
+          
         }
       },
       newGame() {
@@ -70,7 +78,18 @@
   .winner-text {
     font-size: 40px;
     font-weight: bold;
-    color: gold;
+    color: green;
+  }
+
+  .tie-text{
+    font-size: 40px;
+    font-weight: bold;
+    color: rgb(59, 59, 59)
+  }
+
+  .invalid{
+    font-size: 25px;
+    color:rgb(59, 59, 59);
   }
 
   .tboard {
