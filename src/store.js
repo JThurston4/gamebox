@@ -5,7 +5,7 @@ import router from './router';
 
 Vue.use(Vuex)
 
-let production = !window.location.host.includes('localhost')
+// let production = !window.location.host.includes('localhost')
 // let baseUrl = production ? "we'll get there when we get there" : 'localhost:9001/api';
 let baseUrl = '//localhost:9001/api';
 
@@ -24,12 +24,6 @@ export default new Vuex.Store({
   mutations: {
     setGame(state, payload) {
       state.tttGame = payload;
-    },
-    setBoard(state, board) {
-      state.tttBoard = board
-    },
-    setWinner(state, winner) {
-      state.winner = winner
     },
     setUser(state, user) {
       state.user = user
