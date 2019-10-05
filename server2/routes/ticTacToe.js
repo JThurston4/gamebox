@@ -1,7 +1,7 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const router = express.Router();
-const { validateTTT, TicTacToe, determineWinner } = require('../models/ticTacToe');
+const { validateTTT, TicTacToe, determineWinner, antiCheat } = require('../models/ticTacToe');
 const Debug = require('debug')('tictactoe_route')
 
 router.get('/', (req, res) => {
@@ -35,22 +35,20 @@ router.put('/:id', async (req, res) => {
     return res.status(400).send(error.details[0].message)
   }
 
-  determineWinner(req.body)
-  // TicTacToe.findByIdAndUpdate(req.params.id, req.body)
-  //   .then((gamee) => res.send(gamee))
-  //   .catch((err => console.log(err)))
-  Debug(`game submitted :: ${JSON.stringify(req.body, null, 2)}`)
   let game = await TicTacToe.findById(req.params.id);
+  if (!game)
+    return res.status(400).send('Invalid game id')
+
+  let fairGame = antiCheat(req.body.board, game.board)
+  fairGame ? '' : res.status(400).send('Invalid board state');
+  determineWinner(req.body)
+  
+  Debug(`game submitted :: ${JSON.stringify(req.body, null, 2)}`)
+
   await game.update(req.body)
   res.send({message: "Successfully updated", _id: game._id})
-  // let game2 = TicTacToe.findById()
-  // TicTacToe.findById(req.params.id)
-  //   .then((game) => {
-  //     game.update(req.body, (err) => { return console.log(err) })
-  //     res.send(game)
-      Debug(`game sent back :: ${game}`)
-  //   })
-  // .catch(() => res.status(404).send("The game with the given id does not exist"))
+  
+  Debug(`game sent back :: ${game}`)
 })
 
 router.delete('/:id', (req, res) => {

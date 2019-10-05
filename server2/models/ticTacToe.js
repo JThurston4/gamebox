@@ -10,7 +10,7 @@ const ticTacToeSchema = new mongoose.Schema({
   playerOneTurn: { type: Boolean, required: true },
   active: { type: Boolean, required: true, default: true },
   winningPlayer: { type: String },
-  tie: {type: Boolean, required: true, default: false}
+  tie: { type: Boolean, required: true, default: false }
 })
 
 function validateTTT(game) {
@@ -70,6 +70,21 @@ function determineWinner(game) {
   return game
 }
 
+function antiCheat(game1, game2) {
+  let counter = 0;
+  for (let i = 0; i < game1.length; i++) {
+    for (let j = 0; j < game1[i].length; j++) {
+      if (game1[i][j] != game2[i][j]) {
+        counter++
+      }
+    }
+  }
+  if (counter === 1) 
+    return true
+  return false
+}
+
 module.exports.TicTacToe = mongoose.model('TicTacToeGame', ticTacToeSchema)
 module.exports.validateTTT = validateTTT
 module.exports.determineWinner = determineWinner;
+module.exports.antiCheat = antiCheat;

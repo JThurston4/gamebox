@@ -17,7 +17,7 @@
     <div class="container tboard">
       <div v-for="(board, i) in getGame.board" :class="['row', 'sect-' + i]">
         <div v-for="(element, j) in board" :class="['col-4', 'sect-' + i + '-' + j]" v-on:click="updateBoard(i, j)">
-          {{getGame.board[i][j]}}
+          {{getGame.board[i][j]}} <span v-if="getGame.board[i][j] == ' '" :class="['hov']">{{getGame.playerOneTurn === true ? 'X' : 'O'}}</span>
         </div>
       </div>
     </div>
@@ -96,6 +96,10 @@
     border: 2px solid;
     max-width: 500px;
   }
+  
+  .hov {
+    display:none;
+  }
 
   .sect-0 {
     height: 10rem;
@@ -108,7 +112,9 @@
   .sect-2 {
     height: 10rem;
   }
-
+  
+  /* squares */
+  /* #region */
   .sect-0-0 {
     display: flex;
     justify-content: center;
@@ -198,5 +204,47 @@
     border-width: 3px 0px 0px 3px;
     border-style: solid;
     border-color: black;
+    display:i
   }
+  /* #endregion */
+
+  /* hover effect */
+  /* #region */
+  .sect-0-0:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  .sect-0-1:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  .sect-0-2:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  .sect-1-0:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  .sect-1-1:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  .sect-1-2:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  .sect-2-0:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  .sect-2-1:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  .sect-2-2:hover .hov{
+    display:block;
+    opacity: .5;
+  }
+  /* #endregion */
 </style>
