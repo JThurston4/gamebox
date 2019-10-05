@@ -63,7 +63,6 @@ export default new Vuex.Store({
     //#endregion
 
     updateBoard({ commit, dispatch }, game) {
-      console.log(JSON.stringify(game, null, 2))
       api.put(`games/tictactoe/${game._id}`, game)
         .then(res =>
           dispatch('getGameById', res.data._id)
