@@ -1,16 +1,21 @@
-import express from 'express'
-import cors from 'cors'
-import bp from 'body-parser'
-import DbContext from "./db/dbconfig"
-const server = express()
+const express = require('express');
+const logger = require('./middleware/logger.js');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const config = require('config');
+const Debug = require('debug')('server/index.js');
+const ticTacToe = require('./routes/ticTacToe.js');
+const home = require('./routes/home.js');
+const user = require('./routes/users');
+const auth = require('./routes/auth');
+const cors = require('cors');
 
-//Fire up database connection
-DbContext.connect()
+const app = express(); 
 
-//Sets the port to Heroku's, and the files to the built project 
-var port = process.env.PORT || 3000
-server.use(express.static(__dirname + '/../client/dist'))
-
+if (!config.get('privateKey')) {
+  console.log(`FATAL ERROR: jwtPrivateKey is not defined.`)
+  process.exit(1);
+}
 
 var whitelist = ['http://localhost:8080'];
 var corsOptions = {
@@ -20,43 +25,46 @@ var corsOptions = {
   },
   credentials: true
 };
-server.use(cors(corsOptions))
+app.use(cors(corsOptions))
 
-//REGISTER MIDDLEWEAR
-server.use(bp.json())
-server.use(bp.urlencoded({
-  extended: true
-}))
+app.use(express.json());
+app.use(helmet());
+app.use(logger);
 
-//REGISTER YOUR SESSION, OTHERWISE YOU WILL NEVER GET LOGGED IN
-import AuthController from './controllers/AuthController'
-import Session from "./middleware/session"
-server.use(new Session().express)
-server.use('/account', new AuthController().router)
+require('./db/mlab-config.js');
 
-//YOUR ROUTES HERE!!!!!!
-import BoardController from './controllers/BoardController'
-import ListController from './controllers/ListController'
-import TaskController from './controllers/TaskController'
-import CommentController from './controllers/CommentController'
+app.use('/', home);
+app.use(user.session)
+app.use('/api/users', user.router);
 
-server.use('/api/boards', new BoardController().router)
-server.use('/api/lists', new ListController().router)
-server.use('/api/tasks', new TaskController().router)
-server.use('/api/comments', new CommentController().router)
-
-//Default Error Handler
-server.use((error, req, res, next) => {
-  res.status(error.status || 400).send({ error: { message: error.message } })
+app.use((req, res, next) => {
+  if (!req.session.uid) {
+    console.log(req.session.uid)
+    return res.status(401).send({
+      error: 'please login to continue'
+    })
+  }
+  next()
 })
 
-//Catch all
-server.use('*', (req, res, next) => {
-  res.status(404).send({
-    error: 'No matching routes'
-  })
-})
+app.use('/api/games/tictactoe', ticTacToe);
+// app.use('/api/auth', auth);
+// console.log(`Application Name: ${config.get('name')}`)
+console.log('Application Name: '+ config.get('name'))
 
-server.listen(port, () => {
-  console.log('server running on port', port)
-})
+console.log(`NODE_ENV is ${process.env.NODE_ENV}`)
+console.log(`app:: ${app.get('env')}`);
+
+if (app.get('env') === 'development') {
+  app.use(morgan('tiny'));
+  Debug('morgan enabled')
+}
+
+
+
+
+
+
+
+const port = process.env.PORT || 9001
+app.listen(port, () => console.log(`listening on port ${port}`));

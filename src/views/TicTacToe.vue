@@ -17,7 +17,7 @@
     <div class="container tboard">
       <div v-for="(board, i) in getGame.board" :class="['row', 'sect-' + i]">
         <div v-for="(element, j) in board" :class="['col-4', 'sect-' + i + '-' + j]" v-on:click="updateBoard(i, j)">
-          {{getGame.board[i][j]}} <span v-if="getGame.board[i][j] == ' '" :class="['hov']">{{getGame.playerOneTurn === true ? 'X' : 'O'}}</span>
+          {{getGame.board[i][j]}} <span v-if="getGame.board[i][j] == ' ' && getGame.active" :class="['hov']">{{getGame.playerOneTurn === true ? 'X' : 'O'}}</span>
         </div>
       </div>
     </div>
@@ -35,7 +35,6 @@
     },
     computed: {
       getGame() {
-        console.log(this.$store.state.tttGame)
         return this.$store.state.tttGame;
       },
     },
@@ -51,7 +50,6 @@
             this.getGame.board = board;
             this.getGame.playerOneTurn = !this.getGame.playerOneTurn;
             this.getGame.lastSaved = Date.now();
-            console.log(this.getGame)
             this.$store.dispatch("updateBoard", this.getGame)
           }
           
@@ -59,9 +57,6 @@
       },
       newGame() {
         this.$store.dispatch("newGameTTT", { playerOneTurn: true })
-      },
-      status() {
-        console.log(this.getBoard)
       },
     },
     components: {},
