@@ -5,7 +5,7 @@
         {{getGame.winningPlayer}} wins!
       </div>
       <div :class="['col-12', 'tie-text']" v-if="getGame.tie">
-        Cats game!
+        Tie game, impressive!
       </div>
       <div :class="['col-12', 'invalid']" v-if="invalid">
         Invalid move, please try again
@@ -14,11 +14,14 @@
         <button v-on:click="newGame()">New Game</button>
       </div>
     </div>
-    <div class="container">
-      <div v-for="(row, i) in getGame.board" :class="['row', 'sect-' + i]">
-        <div v-for="(element, j) in row" :class="['col', 'sect-' + i + '-' + j]" v-on:click="updateBoard(i, j)">
-          {{getGame.board[i][j]}} <span v-if="getGame.board[i][j] == ' ' && getGame.active"
-            :class="['hov']">{{getGame.playerOneTurn === true ? 'X' : 'O'}}</span>
+    <div class="container table">
+      <div v-for="(row, i) in getGame.board" >
+        <div v-for="(element, j) in row" v-on:click="updateBoard(i, j)">
+          <div class="square">
+            <div class="circle">{{getGame.board[i][j]}}</div>
+          </div>
+          <!-- <span v-if="getGame.board[i][j] == ' ' && getGame.active"
+            :class="['hov']">{{getGame.playerOneTurn === true ? 'X' : 'O'}}</span> -->
         </div>
       </div>
     </div>
@@ -41,6 +44,22 @@
     methods: {
       newGame() {
         this.$store.dispatch('newGameC4', {playerOneTurn: true})
+      },
+
+      updateBoard(index) {
+        if (this.getGame.active) {
+          let board = this.getGame.board
+          if (board[0][index] != " ") {
+            this.invalid = true
+          } else {
+            this.invalid = false
+            board[0].splice(index, 1, this.getGame.playerOneTurn === true ? 1 : 2)
+            this.getGame.board = board;
+            this.getGame.playerOneTurn = !this.getGame.playerOneTurn;
+            this.getGame.lastSaved = Date.now();
+            this.$store.dispatch("updateC4Game", this.getGame)
+          }
+        }
       }
     },
     components: {},
@@ -51,5 +70,52 @@
 
 <style>
 
+.sect {
+    height: 5rem;
+    /* border: solid 1.5px red */
+  }
 
+  .sect-1 {
+    height: 10rem;
+  }
+
+  .sect-2 {
+    height: 10rem;
+  }
+
+  .sector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6rem;
+    border-width: 1.5px 1.5px 1.5px 1.5px;
+    border-style: solid;
+    border-color: black;
+    width: 50px;
+    height:50px;
+  }
+
+  .table {
+  height: 480px;
+  width: 590px;
+}
+
+  .circle {
+  height: 55px;
+  width: 55px;
+  background: blue;
+
+  border-radius: 50%;
+}
+
+.square {
+  height: 80px;
+  width: 80px;
+  background: rgb(121, 121, 251);
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: 1px, solid, black;
+}
 </style>

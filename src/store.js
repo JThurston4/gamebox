@@ -91,7 +91,7 @@ export default new Vuex.Store({
 
     // #region C4
     async newGameC4({ commit, dispatch }, game) {
-      let response = await api.post(`games/connect4`)
+      let response = await api.post(`games/connect4`, game)
       dispatch('getC4ById', response.data._id)
     },
 

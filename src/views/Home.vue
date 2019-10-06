@@ -1,10 +1,14 @@
 <template>
   <div class="container-fluid ttt">
-    <div class="toT">
-      <router-link :to="{name: 'ttt'}">
-        <h1>click me</h1>
+    <div class="row toT">
+      <router-link class="col-12" :to="{name: 'ttt'}">
+        <h1>TicTacToe</h1>
+      </router-link>
+      <router-link class="col-12" :to="{name: 'c4'}">
+        <h1>Connect4</h1>
       </router-link>
     </div>
+
     <!-- <div class="row">
       <div :class="[getGameStatus.active ? 'col-6' : 'col-4']">
         <button v-on:click="counter += 1, status()">get status</button>
