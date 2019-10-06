@@ -63,11 +63,12 @@ function determineWinner(game) {
           game.active = false;
           return;
         }
-        if (row[j] === counter.player) {
-          counter.count++
-        } else if (row[j] === ' ') {
+        if (row[j] === ' ' || j === 0) {
           counter.player = 0
           counter.count = 0
+        }
+        if (row[j] === counter.player) {
+          counter.count++
         } else {
           counter.player = row[j]
           counter.count = 1
@@ -83,6 +84,16 @@ function determineWinner(game) {
         game.active = false;
         return;
       }
+    }
+  }
+
+  const tie = (matrix) => {
+    const flatBoard = matrix.reduce((acc, curr) => {
+      return acc.concat(curr)
+    })
+    if (flatBoard.every((element) => { return element === 1 || element === 2 })) {
+      game.active = false;
+      game.tie = true;
     }
   }
 
@@ -125,6 +136,7 @@ function determineWinner(game) {
   winCon1(game.board);
   vertical(game.board);
   diagonals(game.board);
+  tie(game.board);
 }
 
 
