@@ -57,7 +57,6 @@
             this.getGame.board = board;
             this.getGame.playerOneTurn = !this.getGame.playerOneTurn;
             this.getGame.lastSaved = Date.now();
-            console.log(this.getGame.board)
             this.$store.dispatch("updateC4Game", this.getGame)
           }
         }
@@ -70,31 +69,6 @@
 </script>
 
 <style>
-
-.sect {
-    height: 5rem;
-    /* border: solid 1.5px red */
-  }
-
-  .sect-1 {
-    height: 10rem;
-  }
-
-  .sect-2 {
-    height: 10rem;
-  }
-
-  .sector {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 6rem;
-    border-width: 1.5px 1.5px 1.5px 1.5px;
-    border-style: solid;
-    border-color: black;
-    width: 50px;
-    height:50px;
-  }
 
   .table {
   height: 480px;
