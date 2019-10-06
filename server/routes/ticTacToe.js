@@ -48,7 +48,6 @@ router.put('/:id', async (req, res) => {
   await game.update(req.body)
   res.send({message: "Successfully updated", _id: game._id})
   
-  Debug(`game sent back :: ${game}`)
 })
 
 router.delete('/:id', (req, res) => {
