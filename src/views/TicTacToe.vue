@@ -29,7 +29,6 @@
     name: '',
     data() {
       return {
-        counter: 0,
         invalid: false
       }
     },
@@ -50,7 +49,7 @@
             this.getGame.board = board;
             this.getGame.playerOneTurn = !this.getGame.playerOneTurn;
             this.getGame.lastSaved = Date.now();
-            this.$store.dispatch("updateBoard", this.getGame)
+            this.$store.dispatch("updateTTTBoard", this.getGame)
           }
           
         }

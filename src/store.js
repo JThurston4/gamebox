@@ -18,15 +18,19 @@ let api = axios.create({
 export default new Vuex.Store({
   state: {
     tttGame: {},
-    user: {}
+    user: {},
+    c4Game: {}
 
   },
   mutations: {
-    setGame(state, payload) {
+    setTTTGame(state, payload) {
       state.tttGame = payload;
     },
     setUser(state, user) {
       state.user = user
+    },
+    setC4Game(state, payload) {
+      state.c4Game = payload;
     }
   },
   actions: {
@@ -62,7 +66,8 @@ export default new Vuex.Store({
     },
     //#endregion
 
-    updateBoard({ commit, dispatch }, game) {
+    // #region TTT
+    updateTTTBoard({ commit, dispatch }, game) {
       api.put(`games/tictactoe/${game._id}`, game)
         .then(res =>
           dispatch('getGameById', res.data._id)
@@ -70,15 +75,43 @@ export default new Vuex.Store({
     },
     newGameTTT({ commit }, game) {
       api.post('games/tictactoe', game)
-        .then(res => commit('setGame', res.data))
+        .then(res => commit('setTTTGame', res.data))
     },
-    async getGameById({ commit }, id) {
+    async getTTTById({ commit }, id) {
       let response = await api.get(`games/tictactoe/${id}`)
-      commit('setGame', response.data)
-    }
-    // async newGameTTT({ commit }) {
-    //   const game = await api.post('games/tictactoe')
-    //   commit('setNewGame', game)
-    // }
+      commit('setTTTGame', response.data)
+    },
+    // DELETE HAS NOT BEEN TESTED
+    async deleteTTTGame({ commit }, id) {
+      let response = await api.delete(`games/tictactoe/${id}`)
+      if (response.status === 200)
+        commit('setTTTGame', {})
+    },
+    //#endregion
+
+    // #region C4
+    async newGameC4({ commit, dispatch }, game) {
+      let response = await api.post(`games/connect4`)
+      dispatch('getC4ById', response.data._id)
+    },
+
+    async getC4ById({ commit }, id) {
+      let response = await api.get(`games/connect4/${id}`)
+      commit('setC4Game', response.data)
+    },
+
+    async updateC4Game({ dispatch }, game) {
+      let response = await api.post(`games/connect4/${game._id}`)
+      if (response.status === 200)
+        dispatch('getC4ById', response.data._id)
+    },
+
+    // DELETE HAS NOT BEEN TESTED
+    async deleteC4Game({ commit }, id) {
+      let resposne = await api.delete(`games/connect4/${id}`)
+      if (resposne.status === 200)
+        commit('setC4Game', {})
+    },
+    //#endregion
   }
 })
