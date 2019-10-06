@@ -37,3 +37,17 @@ function validateC4(game) {
   }
   return Joi.validate(game, schema)
 }
+
+function formatBoard(game) {
+  for (let i = 0; i < game.board[0].length; i++) {
+    if (game.board[0][i] != ' ') {
+      for (let j = game.board.length - 1; j >= 0; j--) {
+        if (game.board[j][i] === ' ') {
+          game.board[j].splice(i, 1, game.board[0][i])
+          game.board[0].splice(i, 1, ' ')
+        }
+      }
+    }
+  }
+  return game;
+}
