@@ -16,9 +16,9 @@
     </div>
     <div class="container table">
       <div v-for="(row, i) in getGame.board" >
-        <div v-for="(element, j) in row" v-on:click="updateBoard(i, j)">
+        <div v-for="(element, j) in row" v-on:click="updateBoard(j)">
           <div class="square">
-            <div class="circle">{{getGame.board[i][j]}}</div>
+            <div :class="[getGame.board[i][j] == ' ' ? 'circle' : 'circle-' + getGame.board[i][j]]"></div>
           </div>
           <!-- <span v-if="getGame.board[i][j] == ' ' && getGame.active"
             :class="['hov']">{{getGame.playerOneTurn === true ? 'X' : 'O'}}</span> -->
@@ -57,6 +57,7 @@
             this.getGame.board = board;
             this.getGame.playerOneTurn = !this.getGame.playerOneTurn;
             this.getGame.lastSaved = Date.now();
+            console.log(this.getGame.board)
             this.$store.dispatch("updateC4Game", this.getGame)
           }
         }
@@ -104,6 +105,22 @@
   height: 55px;
   width: 55px;
   background: blue;
+
+  border-radius: 50%;
+}
+
+.circle-1 {
+  height: 55px;
+  width: 55px;
+  background: red;
+
+  border-radius: 50%;
+}
+
+.circle-2 {
+  height: 55px;
+  width: 55px;
+  background: yellow;
 
   border-radius: 50%;
 }

@@ -101,7 +101,7 @@ export default new Vuex.Store({
     },
 
     async updateC4Game({ dispatch }, game) {
-      let response = await api.post(`games/connect4/${game._id}`)
+      let response = await api.put(`games/connect4/${game._id}`, game)
       if (response.status === 200)
         dispatch('getC4ById', response.data._id)
     },
