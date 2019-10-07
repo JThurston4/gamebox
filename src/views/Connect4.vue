@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div :class="['col-12', 'winner-text']" v-if="!!getGame.winningPlayer">
-        {{getGame.winningPlayer}} wins!
+        Player {{getGame.winningPlayer}} wins!
       </div>
       <div :class="['col-12', 'tie-text']" v-if="getGame.tie">
         Tie game, impressive!
@@ -69,6 +69,12 @@
 </script>
 
 <style>
+  .winner-text {
+    font-size: 40px;
+    font-weight: bold;
+    color: green;
+  }
+
   .table {
     height: 300px;
     width: 350px;

@@ -11,7 +11,7 @@ const connect4Schema = new mongoose.Schema({
     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-      [' ', ' ', ' ', ' ', ' ', ' ', ' ']]
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ']]
   },
   author: { type: ObjectId, ref: 'User' },
   created: { type: Date, required: true, default: Date.now() },

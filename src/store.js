@@ -70,7 +70,7 @@ export default new Vuex.Store({
     updateTTTBoard({ commit, dispatch }, game) {
       api.put(`games/tictactoe/${game._id}`, game)
         .then(res =>
-          dispatch('getGameById', res.data._id)
+          dispatch('getTTTById', res.data._id)
         )
     },
     newGameTTT({ commit }, game) {
