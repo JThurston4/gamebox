@@ -17,7 +17,10 @@
     <div class="container tboard">
       <div v-for="(board, i) in getGame.board" :class="['row', 'sect-' + i]">
         <div v-for="(element, j) in board" :class="['col-4', 'sect-' + i + '-' + j]" v-on:click="updateBoard(i, j)">
-          {{getGame.board[i][j]}} <span v-if="getGame.board[i][j] == ' ' && getGame.active" :class="['hov']">{{getGame.playerOneTurn === true ? 'X' : 'O'}}</span>
+          {{getGame.board[i][j]}} 
+          <span v-if="getGame.board[i][j] == ' ' && getGame.active" :class="['hov']">
+            {{getGame.playerOneTurn === true ? 'X' : 'O'}}
+          </span>
         </div>
       </div>
     </div>

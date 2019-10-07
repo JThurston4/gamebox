@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="container table">
-      <div v-for="(row, i) in getGame.board" >
+      <div v-for="(row, i) in getGame.board">
         <div v-for="(element, j) in row" v-on:click="updateBoard(j)">
           <div class="square">
             <div :class="[getGame.board[i][j] == ' ' ? 'circle' : 'circle-' + getGame.board[i][j]]"></div>
@@ -43,7 +43,7 @@
     },
     methods: {
       newGame() {
-        this.$store.dispatch('newGameC4', {playerOneTurn: true})
+        this.$store.dispatch('newGameC4', { playerOneTurn: true })
       },
 
       updateBoard(index) {
@@ -69,81 +69,39 @@
 </script>
 
 <style>
-.table {
-  height: 300px;
-  width: 350px;
-  padding:0px;
-}
-
-  .circle {
-  height: 35px;
-  width: 35px;
-  background: blue;
-
-  border-radius: 50%;
-}
-
-.circle-1 {
-  height: 35px;
-  width: 35px;
-  background: red;
-
-  border-radius: 50%;
-}
-
-.circle-2 {
-  height: 35px;
-  width: 35px;
-  background: yellow;
-
-  border-radius: 50%;
-}
-
-.square {
-  height: 50px;
-  width: 50px;
-  background: rgb(121, 121, 251);
-  float: left;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  outline: 1px, solid, black;
-}
-
-
-@media (min-width: 768px) {
   .table {
-    height: 480px;
-    width: 560px;
+    height: 300px;
+    width: 350px;
+    padding: 0px;
   }
 
   .circle {
-    height: 55px;
-    width: 55px;
+    height: 35px;
+    width: 35px;
     background: blue;
 
     border-radius: 50%;
   }
 
   .circle-1 {
-    height: 55px;
-    width: 55px;
+    height: 35px;
+    width: 35px;
     background: red;
 
     border-radius: 50%;
   }
 
   .circle-2 {
-    height: 55px;
-    width: 55px;
+    height: 35px;
+    width: 35px;
     background: yellow;
 
     border-radius: 50%;
   }
 
   .square {
-    height: 80px;
-    width: 80px;
+    height: 50px;
+    width: 50px;
     background: rgb(121, 121, 251);
     float: left;
     display: flex;
@@ -151,5 +109,47 @@
     align-items: center;
     outline: 1px, solid, black;
   }
-}
+
+
+  @media (min-width: 768px) {
+    .table {
+      height: 480px;
+      width: 560px;
+    }
+
+    .circle {
+      height: 55px;
+      width: 55px;
+      background: blue;
+
+      border-radius: 50%;
+    }
+
+    .circle-1 {
+      height: 55px;
+      width: 55px;
+      background: red;
+
+      border-radius: 50%;
+    }
+
+    .circle-2 {
+      height: 55px;
+      width: 55px;
+      background: yellow;
+
+      border-radius: 50%;
+    }
+
+    .square {
+      height: 80px;
+      width: 80px;
+      background: rgb(121, 121, 251);
+      float: left;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      outline: 1px, solid, black;
+    }
+  }
 </style>
